@@ -1,0 +1,9 @@
+{
+  "name": "Company Advance & Expense Manager",
+  "short_name": "Advance Manager",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f5f8",
+  "theme_color": "#101827",
+  "description": "Offline company advance, conveyance and product purchase ledger"
+}

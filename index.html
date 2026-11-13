@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>Company Advance Manager</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--ink:#172033;--muted:#718096;--navy:#101827;--green:#16845b;--red:#c2414b;--line:#e7ebf0;--gold:#c18b35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+header{background:linear-gradient(135deg,#101827,#1d3045);color:#fff;padding:24px 18px 22px;border-radius:0 0 24px 24px}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:12px;letter-spacing:1.3px;color:#b9c6d6}.title{font-size:21px;font-weight:750;margin-top:5px}.date{font-size:12px;color:#c7d1dd}
+.balance-label{font-size:12px;color:#c7d1dd;margin-top:23px}.balance{font-size:32px;font-weight:800;letter-spacing:.3px;margin-top:2px}.sub{font-size:12px;color:#c7d1dd;margin-top:4px}
+.wrap{max-width:760px;margin:auto;padding:15px 14px 100px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:-2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 3px 12px #17203308}.metric small{color:var(--muted);font-size:11px}.metric strong{display:block;font-size:19px;margin-top:5px}.green{color:var(--green)}.red{color:var(--red)}
+.section{display:flex;justify-content:space-between;align-items:center;margin:23px 2px 10px}.section h2{font-size:15px;margin:0}.hint{font-size:11px;color:var(--muted)}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.action{border:0;border-radius:13px;padding:14px 10px;text-align:left;background:#fff;color:var(--ink);box-shadow:0 2px 10px #17203308;font-weight:700}.action span{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:4px}
+.tabs{display:flex;gap:6px;overflow:auto;margin:16px 0}.tab{border:1px solid var(--line);background:#fff;padding:9px 13px;border-radius:20px;white-space:nowrap;font-size:12px;color:#526071}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+label{font-size:12px;color:#566273;display:block;margin:12px 0 5px}input,select,textarea{width:100%;border:1px solid #dce2e9;border-radius:10px;padding:12px;background:#fff;font:inherit;color:var(--ink);font-size:14px}button.primary{border:0;background:var(--green);color:white;border-radius:11px;padding:13px 16px;font-weight:700;width:100%;margin-top:14px}button.secondary{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;color:var(--ink);font-weight:600}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hidden{display:none!important}
+.tx{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.tx:last-child{border:0}.tx b{font-size:13px}.tx small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.amount{font-weight:750;white-space:nowrap;font-size:14px}.empty{color:var(--muted);text-align:center;padding:22px;font-size:13px}
+.pill{font-size:10px;border-radius:20px;padding:3px 7px;background:#edf2f7;color:#526071;margin-left:5px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:center;gap:7px;padding:9px 8px calc(9px + env(safe-area-inset-bottom));z-index:5}.bottom button{border:0;background:transparent;padding:7px 12px;color:#697586;font-size:11px}.bottom button.active{color:var(--green);font-weight:800}
+.notice{background:#fff8e8;border:1px solid #f1dfb8;color:#72551e;padding:11px;border-radius:12px;font-size:11px;line-height:1.5;margin-top:13px}
+footer{font-size:10px;color:#8993a2;text-align:center;margin-top:25px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}.actions{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><div><div class="brand">PERSONAL WORK FINANCE</div><div class="title">Company Advance Manager</div></div><div class="date" id="today"></div></div>
+ <div class="balance-label">বর্তমান মোট ব্যালেন্স</div><div class="balance" id="totalBalance">৳6,490</div><div class="sub">Cash + bKash + Nagad</div>
+</header>
+<main class="wrap">
+ <div id="dashboard">
+  <div class="grid">
+   <div class="card metric"><small>Cash</small><strong id="cashBal">৳6,490</strong></div>
+   <div class="card metric"><small>bKash</small><strong id="bkashBal">৳0</strong></div>
+   <div class="card metric"><small>Nagad</small><strong id="nagadBal">৳0</strong></div>
+   <div class="card metric"><small>আজকের খরচ</small><strong id="todayExpense" class="red">৳0</strong></div>
+  </div>
+  <div class="section"><h2>দ্রুত এন্ট্রি</h2><span class="hint">লেনদেন যোগ করুন</span></div>
+  <div class="actions">
+   <button class="action" onclick="openForm('received')">＋ টাকা গ্রহণ<span>Company advance</span></button>
+   <button class="action" onclick="openForm('expense')">− খরচ যোগ<span>Conveyance / Lunch / Other</span></button>
+   <button class="action" onclick="openForm('purchase')">▣ প্রোডাক্ট ক্রয়<span>Product / Production</span></button>
+   <button class="action" onclick="openForm('transfer')">⇄ টাকা স্থানান্তর<span>Cash / bKash / Nagad</span></button>
+  </div>
+  <div class="section"><h2>সাম্প্রতিক লেনদেন</h2><span class="hint">সর্বশেষ ১০টি</span></div>
+  <div class="card" id="recent"></div>
+  <div class="notice">Opening Balance: ১০ নভেম্বর ২০২৬ — Cash ৳৬,৪৯০, bKash ৳০, Nagad ৳০। একই টাকা এক মাধ্যম থেকে অন্য মাধ্যমে পাঠালে সেটি খরচ হিসেবে গণনা হবে না।</div>
+ </div>
+ <div id="entry" class="hidden">
+  <div class="section"><h2 id="formTitle">নতুন লেনদেন</h2><span class="hint">প্রয়োজনীয় তথ্য দিন</span></div>
+  <div class="card">
+   <label>লেনদেনের ধরন</label><select id="type" onchange="typeChanged()"><option value="received">Company Advance Received</option><option value="expense">Expense</option><option value="purchase">Product Purchase</option><option value="transfer">Fund Transfer</option></select>
+   <label>তারিখ</label><input id="date" type="date" value="2026-11-10">
+   <div id="commonFields">
+    <label id="amountLabel">টাকার পরিমাণ (৳)</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="যেমন ২০০০">
+    <label id="methodLabel">কোন মাধ্যমে?</label><select id="method"><option>Cash</option><option>bKash</option><option>Nagad</option></select>
+   </div>
+   <div id="expenseFields" class="hidden">
+    <label>খরচের ক্যাটাগরি</label><select id="category"><option>Conveyance</option><option>Lunch / Food</option><option>Office Supplies</option><option>Other</option></select>
+    <label>কী কাজে খরচ হয়েছে?</label><input id="note" placeholder="যেমন: মতিঝিল থেকে উত্তরা">
+   </div>
+   <div id="purchaseFields" class="hidden">
+    <label>প্রোডাক্টের নাম</label><input id="product" placeholder="যেমন: Safety Pin">
+    <div class="formgrid"><div><label>পরিমাণ</label><input id="qty" type="number" min="0" step="0.01" placeholder="যেমন ৮০০০০"></div><div><label>ইউনিট</label><select id="unit"><option>PCS</option><option>KG</option><option>ROLL</option><option>BOX</option><option>PACK</option><option>OTHER</option></select></div></div>
+    <label>সাপ্লায়ার (ঐচ্ছিক)</label><input id="supplier" placeholder="Supplier name">
+    <label>ক্রয়ের বিবরণ</label><input id="purchaseNote" placeholder="অর্ডার / ইনভয়েস / মন্তব্য">
+   </div>
+   <div id="transferFields" class="hidden">
+    <label>যে মাধ্যম থেকে</label><select id="fromMethod"><option>Cash</option><option>bKash</option><option>Nagad</option></select>
+    <label>যে মাধ্যমে যাবে</label><select id="toMethod"><option>bKash</option><option>Cash</option><option>Nagad</option></select>
+   </div>
+   <button class="primary" onclick="saveTx()">লেনদেন সংরক্ষণ করুন</button>
+   <button class="secondary" style="width:100%;margin-top:8px" onclick="showTab('home')">বাতিল</button>
+  </div>
+ </div>
+ <div id="reports" class="hidden">
+  <div class="section"><h2>হিসাব ও রিপোর্ট</h2><span class="hint">তারিখ অনুযায়ী</span></div>
+  <div class="card">
+   <label>রিপোর্টের মাস</label><input type="month" id="reportMonth" value="2026-11" onchange="renderReport()">
+   <div id="reportData"></div>
+   <button class="secondary" style="width:100%;margin-top:12px" onclick="downloadCSV()">CSV রিপোর্ট ডাউনলোড</button>
+  </div>
+ </div>
+ <div id="backup" class="hidden">
+  <div class="section"><h2>Backup & Settings</h2></div>
+  <div class="card">
+   <b>ডেটা ব্যাকআপ</b><p class="hint">এই ডিভাইসে ডেটা অফলাইনে সংরক্ষিত হবে। ব্যাকআপ ফাইল Google Drive-এ আপলোড করলে ক্লাউডে কপি রাখতে পারবেন।</p>
+   <button class="primary" onclick="backupJSON()">Backup ডাউনলোড (JSON)</button>
+   <label>আগের Backup ফিরিয়ে আনুন</label><input type="file" id="restoreFile" accept=".json,application/json">
+   <button class="secondary" style="width:100%;margin-top:9px" onclick="restoreJSON()">Restore Backup</button>
+   <div class="notice">স্বয়ংক্রিয় Cloud Sync এখনো যুক্ত নেই। Google Drive-এ ম্যানুয়াল Backup রাখা যাবে। স্বয়ংক্রিয় Sync চালু করতে পরবর্তী ধাপে Firebase/অনুরূপ Cloud Database সংযোগ প্রয়োজন।</div>
+   <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+   <b>Opening Balance</b><p class="hint">১০ নভেম্বর ২০২৬-এ শুরু</p>
+   <div class="tx"><span>Cash</span><b>৳6,490</b></div><div class="tx"><span>bKash</span><b>৳0</b></div><div class="tx"><span>Nagad</span><b>৳0</b></div>
+   <button class="secondary" style="width:100%;margin-top:10px" onclick="if(confirm('সব লেনদেন মুছে Opening Balance-এ ফিরবেন?')){localStorage.removeItem(KEY);location.reload()}">সব লেনদেন রিসেট</button>
+  </div>
+ </div>
+</main>
+<nav class="bottom">
+ <button id="nav-home" class="active" onclick="showTab('home')">⌂<br>Dashboard</button>
+ <button id="nav-entry" onclick="showTab('entry')">＋<br>Entry</button>
+ <button id="nav-reports" onclick="showTab('reports')">▤<br>Reports</button>
+ <button id="nav-backup" onclick="showTab('backup')">⚙<br>Backup</button>
+</nav>
+<script>
+const KEY='companyAdvanceManager_v1';
+const opening={Cash:6490,bKash:0,Nagad:0};
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||{transactions:[]};
+const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
+const today=()=>new Date().toISOString().slice(0,10);
+document.getElementById('today').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+document.getElementById('date').value='2026-11-10';
+function balances(){
+ let b={...opening};
+ for(const t of data.transactions){
+  if(t.type==='received')b[t.method]+=t.amount;
+  else if(t.type==='expense'||t.type==='purchase')b[t.method]-=t.amount;
+  else if(t.type==='transfer'){b[t.from]-=t.amount;b[t.to]+=t.amount}
+ }
+ return b;
+}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function render(){
+ const b=balances(),total=b.Cash+b.bKash+b.Nagad;
+ document.getElementById('totalBalance').textContent=money(total);
+ document.getElementById('cashBal').textContent=money(b.Cash);
+ document.getElementById('bkashBal').textContent=money(b.bKash);
+ document.getElementById('nagadBal').textContent=money(b.Nagad);
+ const todays=data.transactions.filter(t=>t.date===today()&&(t.type==='expense'||t.type==='purchase')).reduce((s,t)=>s+t.amount,0);
+ document.getElementById('todayExpense').textContent=money(todays);
+ const recent=[...data.transactions].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,10);
+ document.getElementById('recent').innerHTML=recent.length?recent.map(txHTML).join(''):'<div class="empty">এখনো কোনো লেনদেন যোগ করা হয়নি।</div>';
+ renderReport();
+}
+function txHTML(t){
+ let label=t.type==='received'?'Advance Received':t.type==='transfer'?'Fund Transfer':t.type==='purchase'?'Product Purchase':t.category||'Expense';
+ let desc=t.type==='transfer'?t.from+' → '+t.to:(t.product||t.note||t.supplier||t.method);
+ let sign=t.type==='received'?'+':t.type==='transfer'?'⇄':'−';
+ let cls=t.type==='received'?'green':t.type==='transfer'?'':'red';
+ return `<div class="tx"><div><b>${esc(label)}</b><small>${esc(t.date)} · ${esc(desc||'')}</small></div><div class="amount ${cls}">${sign} ${money(t.amount)}</div></div>`;
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showTab(tab){
+ ['dashboard','entry','reports','backup'].forEach((id,i)=>document.getElementById(id).classList.toggle('hidden',id!==({home:'dashboard',entry:'entry',reports:'reports',backup:'backup'}[tab])));
+ document.querySelectorAll('.bottom button').forEach(x=>x.classList.remove('active'));
+ document.getElementById('nav-'+tab).classList.add('active');
+ if(tab==='reports')renderReport();
+}
+function openForm(type){document.getElementById('type').value=type;typeChanged();showTab('entry')}
+function typeChanged(){
+ let t=document.getElementById('type').value;
+ document.getElementById('formTitle').textContent=({received:'টাকা গ্রহণ',expense:'খরচ যোগ',purchase:'প্রোডাক্ট ক্রয়',transfer:'টাকা স্থানান্তর'})[t];
+ document.getElementById('expenseFields').classList.toggle('hidden',t!=='expense');
+ document.getElementById('purchaseFields').classList.toggle('hidden',t!=='purchase');
+ document.getElementById('transferFields').classList.toggle('hidden',t!=='transfer');
+ document.getElementById('commonFields').classList.toggle('hidden',t==='transfer');
+ document.getElementById('amountLabel').textContent=t==='received'?'প্রাপ্ত টাকার পরিমাণ (৳)':'টাকার পরিমাণ (৳)';
+}
+function saveTx(){
+ let type=document.getElementById('type').value,date=document.getElementById('date').value,amount=Number(document.getElementById('amount').value);
+ if(!date||!amount||amount<=0){alert('তারিখ ও সঠিক টাকার পরিমাণ দিন।');return}
+ let t={id:Date.now(),type,date,amount};
+ if(type==='transfer'){
+  t.from=document.getElementById('fromMethod').value;t.to=document.getElementById('toMethod').value;
+  if(t.from===t.to){alert('টাকা পাঠানোর মাধ্যম ও গ্রহণের মাধ্যম আলাদা হতে হবে।');return}
+ }else{
+  t.method=document.getElementById('method').value;
+  if(type==='expense'){t.category=document.getElementById('category').value;t.note=document.getElementById('note').value}
+  if(type==='purchase'){
+   t.product=document.getElementById('product').value.trim();t.qty=Number(document.getElementById('qty').value)||0;t.unit=document.getElementById('unit').value;t.supplier=document.getElementById('supplier').value;t.note=document.getElementById('purchaseNote').value;
+   if(!t.product){alert('প্রোডাক্টের নাম লিখুন।');return}
+  }
+ }
+ let b=balances();
+ if(type==='transfer'&&b[t.from]<amount){alert('এই মাধ্যমে পর্যাপ্ত ব্যালেন্স নেই।');return}
+ if(type!=='received'&&type!=='transfer'&&b[t.method]<amount){if(!confirm('এই মাধ্যমে বর্তমান ব্যালেন্সের চেয়ে বেশি খরচ হচ্ছে। তবুও সংরক্ষণ করবেন?'))return}
+ data.transactions.push(t);persist();document.getElementById('amount').value='';document.getElementById('note').value='';document.getElementById('product').value='';document.getElementById('qty').value='';showTab('home');alert('লেনদেন সংরক্ষণ হয়েছে।');
+}
+function renderReport(){
+ const el=document.getElementById('reportData');if(!el)return;
+ let m=document.getElementById('reportMonth').value||'2026-11';
+ let a=data.transactions.filter(t=>t.date.startsWith(m));
+ let received=a.filter(t=>t.type==='received').reduce((s,t)=>s+t.amount,0);
+ let conv=a.filter(t=>t.type==='expense'&&t.category==='Conveyance').reduce((s,t)=>s+t.amount,0);
+ let purchase=a.filter(t=>t.type==='purchase').reduce((s,t)=>s+t.amount,0);
+ let other=a.filter(t=>t.type==='expense'&&t.category!=='Conveyance').reduce((s,t)=>s+t.amount,0);
+ let total=conv+purchase+other;
+ el.innerHTML=`<div style="margin-top:14px"><div class="tx"><span>মাসে Advance Received</span><b class="green">${money(received)}</b></div><div class="tx"><span>Conveyance</span><b>${money(conv)}</b></div><div class="tx"><span>Product Purchase</span><b>${money(purchase)}</b></div><div class="tx"><span>Other Expenses</span><b>${money(other)}</b></div><div class="tx"><b>মোট খরচ</b><b class="red">${money(total)}</b></div><div class="tx"><b>বর্তমান মোট ব্যালেন্স</b><b class="green">${money(Object.values(balances()).reduce((x,y)=>x+y,0))}</b></div></div>`;
+}
+function backupJSON(){
+ const blob=new Blob([JSON.stringify({opening,transactions:data.transactions,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='company-advance-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);
+}
+function restoreJSON(){
+ const f=document.getElementById('restoreFile').files[0];if(!f){alert('আগে Backup JSON ফাইল নির্বাচন করুন।');return}
+ const r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.transactions))throw 0;data={transactions:x.transactions};persist();alert('Backup Restore হয়েছে।')}catch(e){alert('ফাইলটি সঠিক Backup নয়।')}};r.readAsText(f);
+}
+function downloadCSV(){
+ let rows=[['Date','Type','Category/Product','Amount','Method','Quantity','Unit','Note']];
+ data.transactions.forEach(t=>rows.push([t.date,t.type,t.category||t.product||'',t.amount,t.method||((t.from||'')+' -> '+(t.to||'')),t.qty||'',t.unit||'',t.note||'']));
+ let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');
+ let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='company-advance-report.csv';a.click();URL.revokeObjectURL(a.href);
+}
+render();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script>
+</body></html>
